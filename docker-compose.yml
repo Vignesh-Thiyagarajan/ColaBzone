@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  mysql-colabzone:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ColaBzone@123
+      MYSQL_DATABASE: ColaBzone
+    ports:
+      - "3306:3306"
+    container_name: mysql
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-colabzone
+
+  app:
+    build: .
+    volumes:
+      - .:/app
+    container_name: colabzone
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql-colabzone
+    image: app:ColaBzone
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+
